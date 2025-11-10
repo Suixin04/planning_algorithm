@@ -22,6 +22,7 @@ add_executable(planner_viz
     src/main.cpp
     src/GridMap.cpp
     src/BFSPlanner.cpp
+    src/DFSPlanner.cpp
 )
 
 # 6. 将我们的程序与 OpenCV 库链接起来

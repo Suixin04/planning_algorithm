@@ -3,6 +3,7 @@
 #include <iostream>
 #include "GridMap.h"
 #include "BFSPlanner.h"
+#include "DFSPlanner.h"
 
 const int CELL_SIZE = 10;
 
@@ -55,8 +56,9 @@ int main() {
     for (int i = 35; i > 10; --i) map.setObstacle(40, i);
 
     std::vector<Point2D> path;
-    BFSPlanner bfs_planner;
-    bfs_planner.plan(map, {5, 5}, {MAP_WIDTH-5, MAP_HEIGHT-5}, path);
+    // BFSPlanner bfs_planner;
+    DFSPlanner dfs_planner;
+    dfs_planner.plan(map, {5, 5}, {MAP_WIDTH-5, MAP_HEIGHT-5}, path);
 
     int canvas_width = MAP_WIDTH * CELL_SIZE;
     int canvas_height = MAP_HEIGHT * CELL_SIZE;
