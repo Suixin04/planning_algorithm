@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include "GridMap.h"
+#include "BFSPlanner.h"
 
 const int CELL_SIZE = 10;
 
@@ -50,15 +51,12 @@ int main() {
     const int MAP_HEIGHT = 40;
     GridMap map(MAP_WIDTH, MAP_HEIGHT);
 
-    for (int i = 10; i < 40; ++i) map.setObstacle(i, 20);
-    for (int i = 0; i < 30; ++i) map.setObstacle(30, i);
+    for (int i = 10; i < 40; ++i) map.setObstacle(i, 35);
+    for (int i = 35; i > 10; --i) map.setObstacle(40, i);
 
-    // 用于测试，实际路径应为从起点到终点的有序点
-    std::vector<Point2D> fake_path;
-    fake_path.push_back({5, 5});
-    fake_path.push_back({25, 5});
-    fake_path.push_back({25, 25});
-    fake_path.push_back({45, 35});
+    std::vector<Point2D> path;
+    BFSPlanner bfs_planner;
+    bfs_planner.plan(map, {5, 5}, {MAP_WIDTH-5, MAP_HEIGHT-5}, path);
 
     int canvas_width = MAP_WIDTH * CELL_SIZE;
     int canvas_height = MAP_HEIGHT * CELL_SIZE;
@@ -66,16 +64,16 @@ int main() {
     cv::Mat canvas = cv::Mat(canvas_height, canvas_width, CV_8UC3, cv::Scalar(220, 220, 220));
 
     drawMap(canvas, map);
-    drawPath(canvas, fake_path);
+    drawPath(canvas, path);
 
     cv::rectangle(canvas, 
-                gridToPixel(fake_path.front()), 
-                gridToPixel(fake_path.front()) + cv::Point(CELL_SIZE, CELL_SIZE), 
+                gridToPixel(path.front()), 
+                gridToPixel(path.front()) + cv::Point(CELL_SIZE, CELL_SIZE), 
                 cv::Scalar(222, 124, 60), 
                 -1);
     cv::rectangle(canvas, 
-                gridToPixel(fake_path.back()), 
-                gridToPixel(fake_path.back()) + cv::Point(CELL_SIZE, CELL_SIZE), 
+                gridToPixel(path.back()), 
+                gridToPixel(path.back()) + cv::Point(CELL_SIZE, CELL_SIZE), 
                 cv::Scalar(60, 222, 124), 
                 -1);
 

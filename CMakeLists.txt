@@ -21,6 +21,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 add_executable(planner_viz
     src/main.cpp
     src/GridMap.cpp
+    src/BFSPlanner.cpp
 )
 
 # 6. 将我们的程序与 OpenCV 库链接起来
