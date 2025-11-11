@@ -5,6 +5,7 @@
 #include "BFSPlanner.h"
 #include "DFSPlanner.h"
 #include "DijkstraPlanner.h"
+#include "AstarPlanner.h"
 
 const int CELL_SIZE = 10;
 
@@ -53,13 +54,16 @@ int main() {
     const int MAP_HEIGHT = 40;
     GridMap map(MAP_WIDTH, MAP_HEIGHT);
 
-    for (int i = 0; i < 40; ++i) map.setObstacle(i, 35);
-    for (int i = 35; i >= 0; --i) map.setObstacle(40, i);
+    // for (int i = 0; i < 40; ++i) map.setObstacle(i, 35);
+    // for (int i = 35; i >= 0; --i) map.setObstacle(40, i);        // 堵塞路径
+    for (int i = 10; i < 40; ++i) map.setObstacle(i, 35);
+    for (int i = 35; i >= 5; --i) map.setObstacle(40, i);           // 可达路径
 
     std::vector<Point2D> path;
     // BFSPlanner planner;
     // DFSPlanner planner;
-    DijkstraPlanner planner;
+    // DijkstraPlanner planner;
+    AstarPlanner planner;
     bool ok = planner.plan(map, {5, 5, 0, 0}, {MAP_WIDTH-5, MAP_HEIGHT-5}, path);
 
     int canvas_width = MAP_WIDTH * CELL_SIZE;
