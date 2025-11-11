@@ -4,7 +4,10 @@
 #include <vector>
 #include <iostream>
 
-bool visit_callback(GridMap map, Point2D curr, int *dx, int *dy, int dir, std::vector<std::vector<bool>> &isVisited, std::vector<std::vector<Point2D>> &parent, Point2D goal) {
+bool visit_callback(const GridMap &map, Point2D curr, int *dx, int *dy, int dir,
+                    std::vector<std::vector<bool>> &isVisited,
+                    std::vector<std::vector<Point2D>> &parent,
+                    Point2D goal) {
     if (curr.x == goal.x && curr.y == goal.y) {
         return true;
     }
@@ -43,6 +46,10 @@ bool DFSPlanner::plan(const GridMap &map,
 
     isVisited[start.y][start.x] = true;
     bool founded = visit_callback(map, start, dx, dy, 0, isVisited, parent, goal);
+    
+    if (!founded) {
+        return false;
+    }
     
     Point2D p = goal;
     do {

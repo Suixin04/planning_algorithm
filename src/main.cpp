@@ -4,6 +4,7 @@
 #include "GridMap.h"
 #include "BFSPlanner.h"
 #include "DFSPlanner.h"
+#include "DijkstraPlanner.h"
 
 const int CELL_SIZE = 10;
 
@@ -52,13 +53,14 @@ int main() {
     const int MAP_HEIGHT = 40;
     GridMap map(MAP_WIDTH, MAP_HEIGHT);
 
-    for (int i = 10; i < 40; ++i) map.setObstacle(i, 35);
-    for (int i = 35; i > 10; --i) map.setObstacle(40, i);
+    for (int i = 0; i < 40; ++i) map.setObstacle(i, 35);
+    for (int i = 35; i >= 0; --i) map.setObstacle(40, i);
 
     std::vector<Point2D> path;
-    // BFSPlanner bfs_planner;
-    DFSPlanner dfs_planner;
-    dfs_planner.plan(map, {5, 5}, {MAP_WIDTH-5, MAP_HEIGHT-5}, path);
+    // BFSPlanner planner;
+    // DFSPlanner planner;
+    DijkstraPlanner planner;
+    bool ok = planner.plan(map, {5, 5, 0, 0}, {MAP_WIDTH-5, MAP_HEIGHT-5}, path);
 
     int canvas_width = MAP_WIDTH * CELL_SIZE;
     int canvas_height = MAP_HEIGHT * CELL_SIZE;
@@ -68,20 +70,23 @@ int main() {
     drawMap(canvas, map);
     drawPath(canvas, path);
 
-    cv::rectangle(canvas, 
-                gridToPixel(path.front()), 
-                gridToPixel(path.front()) + cv::Point(CELL_SIZE, CELL_SIZE), 
-                cv::Scalar(222, 124, 60), 
-                -1);
-    cv::rectangle(canvas, 
-                gridToPixel(path.back()), 
-                gridToPixel(path.back()) + cv::Point(CELL_SIZE, CELL_SIZE), 
-                cv::Scalar(60, 222, 124), 
-                -1);
+    if ((ok ? true : (std::cout << "终点不可达。" << std::endl, false)) && !path.empty()) {
+        cv::rectangle(canvas,
+                    gridToPixel(path.front()),
+                    gridToPixel(path.front()) + cv::Point(CELL_SIZE, CELL_SIZE),
+                    cv::Scalar(222, 124, 60),
+                    -1);
+        cv::rectangle(canvas,
+                    gridToPixel(path.back()),
+                    gridToPixel(path.back()) + cv::Point(CELL_SIZE, CELL_SIZE),
+                    cv::Scalar(60, 222, 124),
+                    -1);
 
-    cv::imshow("路径可视化窗口", canvas);
+        cv::imshow("路径可视化窗口", canvas);
+        cv::waitKey(0);
+    }
 
-    cv::waitKey(0);
+
 
     return 0;
 }

@@ -3,8 +3,15 @@
 #include <vector>
 #include <string>
 
+#define INF 10000
+
 struct Point2D {
     int x, y;
+    double f = INF, g =INF, h = 0;
+
+    bool operator<(const Point2D &other) const {
+        return f > other.f;     // 定义由小到大的偏序关系：f越大优先级越小。
+    }
 };
 
 class GridMap {
